@@ -1,0 +1,52 @@
+import random
+
+def choose_word(word_list):
+    """Choose a random word from the provided list of words."""
+    return random.choice(word_list)
+
+def display_word(word, guessed_letters):
+    """Display the current state of the word with guessed letters revealed."""
+    return " ".join([letter if letter in guessed_letters else "_" for letter in word])
+
+def get_guess():
+    """Prompt the user to guess a letter."""
+    return input("Guess a letter: ").lower()
+
+def update_guesses(guess, word, guessed_letters, incorrect_guesses):
+    """Update the set of guessed letters and count of incorrect guesses."""
+    if guess in guessed_letters:
+        print("You already guessed that letter.")
+    elif guess in word:
+        guessed_letters.add(guess)
+        print(f"Good job! {guess} is in the word.")
+    else:
+        guessed_letters.add(guess)
+        incorrect_guesses += 1
+        print(f"Sorry, {guess} is not in the word. You have {max_incorrect_guesses - incorrect_guesses} guesses left.")
+    return incorrect_guesses
+
+def play_game():
+    """Main function to play the word guessing game."""
+    words = ["python", "development", "hangman", "resume", "project", "example"]
+    word = choose_word(words)
+    guessed_letters = set()
+    incorrect_guesses = 0
+    max_incorrect_guesses = 6
+
+    print("Welcome to the Word Guessing Game!")
+    print("Try to guess the word, one letter at a time.")
+    print(f"You have {max_incorrect_guesses} incorrect guesses available.")
+
+    while incorrect_guesses < max_incorrect_guesses:
+        print("\n" + display_word(word, guessed_letters))
+        guess = get_guess()
+        incorrect_guesses = update_guesses(guess, word, guessed_letters, incorrect_guesses)
+
+        if all(letter in guessed_letters for letter in word):
+            print(f"\nCongratulations! You guessed the word: {word}")
+            break
+    else:
+        print(f"\nGame over! The word was: {word}")
+
+if __name__ == "__main__":
+    play_game()
